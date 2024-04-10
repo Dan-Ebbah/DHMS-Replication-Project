@@ -10,11 +10,11 @@ import javax.jws.soap.SOAPBinding;
 @SOAPBinding(style = SOAPBinding.Style.RPC)
 public interface ServerInterface {
     @WebMethod
-    String addAppointment(String appointmentID, AppointmentType appointmentType, int capacity);
+    String addAppointment(String appointmentID, String appointmentType, int capacity);
     @WebMethod
-    String removeAppointment( String appointmentID,  AppointmentType appointmentType);
+    String removeAppointment( String appointmentID,  String appointmentType);
     @WebMethod
-    String bookAppointment( String patientID,  AppointmentType appointmentType,  String appointmentID);
+    String bookAppointment( String patientID,  String appointmentType,  String appointmentID);
     @WebMethod
     String cancelAppointment( String patientID,  String appointmentID);
     @WebMethod

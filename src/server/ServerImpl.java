@@ -45,14 +45,14 @@ public class ServerImpl implements ServerInterface {
     }
 
     @Override
-    public String addAppointment(String appointmentID, AppointmentType appointmentType, int capacity) {
+    public String addAppointment(String appointmentID, String appointmentType, int capacity) {
         if (isAppointmentPresent(appointmentID)) {
             String msg = "Could not add appointment, because appointment seems to already exist";
             logger.info(String.format(msg.concat(": Appointment Type = %s, Appointment ID = %s, Appointment Capacity = %d"), appointmentID, appointmentType, capacity));
             return msg;
         }
 
-        Appointment appointment = new Appointment(appointmentID, appointmentType, capacity);
+        Appointment appointment = new Appointment(appointmentID, AppointmentType.valueOf(appointmentType), capacity);
         _database.insert(appointment);
         String msg = "Successfully added the new appointment";
         logger.info(String.format(msg.concat(": Appointment Type = %s, Appointment ID = %s, Appointment Capacity = %d"), appointmentID, appointmentType, capacity));
@@ -60,9 +60,9 @@ public class ServerImpl implements ServerInterface {
     }
 
     @Override
-    public String removeAppointment(String appointmentID, AppointmentType appointmentType) {
+    public String removeAppointment(String appointmentID, String appointmentType) {
         if (isAppointmentPresent(appointmentID)) {
-            String removeMsg = _database.remove(new Appointment(appointmentID, appointmentType));
+            String removeMsg = _database.remove(new Appointment(appointmentID, AppointmentType.valueOf(appointmentType)));
             logger.info(String.format(removeMsg.concat(": Appointment Type = %s, Appointment ID = %s"), appointmentID, appointmentType));
             return removeMsg;
         }
@@ -72,8 +72,8 @@ public class ServerImpl implements ServerInterface {
     }
 
     @Override
-    public String bookAppointment(String patientID, AppointmentType appointmentType, String appointmentID) {
-        Appointment appointment = new Appointment(appointmentID, appointmentType);
+    public String bookAppointment(String patientID, String appointmentType, String appointmentID) {
+        Appointment appointment = new Appointment(appointmentID, AppointmentType.valueOf(appointmentType));
         if (isAppointmentPresent(appointmentID)) {
             String msg = _database.book(patientID, appointment);
             logger.info(String.format(msg.concat(": Appointment Type = %s, Appointment ID = %s, Patient ID = %s"), appointmentID, appointmentType, patientID));
