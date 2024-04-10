@@ -4,6 +4,9 @@ public class UDPServerInfo {
     private String serverAddress;
     private int port;
 
+    public UDPServerInfo() {
+    }
+
     public UDPServerInfo(String serverAddress, int port) {
         this.serverAddress = serverAddress;
         this.port = port;
