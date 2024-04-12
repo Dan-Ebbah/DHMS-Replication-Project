@@ -7,17 +7,16 @@ import util.LoggerUtil;
 import javax.jws.WebService;
 import javax.jws.soap.SOAPBinding;
 import java.net.SocketException;
-import java.util.logging.Logger;
 
 @WebService
 @SOAPBinding(style = SOAPBinding.Style.RPC)
-public class QuebecServerImpl extends ServerImpl{
-    public QuebecServerImpl() {
+public class QuebecServerObjectImpl extends ServerObjectImpl {
+    public QuebecServerObjectImpl() {
         super();
     }
 
-    public QuebecServerImpl(HashMapImpl database) throws SocketException {
-        super(database, 5051, LoggerUtil.getLogger(QuebecServerImpl.class.getName(), "Quebec"));
+    public QuebecServerObjectImpl(HashMapImpl database) throws SocketException {
+        super(database, 5051, LoggerUtil.getLogger(QuebecServerObjectImpl.class.getName(), "QUE"));
     }
 
     @Override

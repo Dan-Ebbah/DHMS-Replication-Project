@@ -9,11 +9,11 @@ import util.LoggerUtil;
 import java.net.SocketException;
 @WebService
 @SOAPBinding(style = SOAPBinding.Style.RPC)
-public class SherbrookeServerImpl extends ServerImpl{
-    public SherbrookeServerImpl() throws SocketException {
+public class SherbrookeServerObjectImpl extends ServerObjectImpl {
+    public SherbrookeServerObjectImpl() throws SocketException {
         super();
-    }public SherbrookeServerImpl(HashMapImpl database) throws SocketException {
-        super(database, 5053, LoggerUtil.getLogger(SherbrookeServerImpl.class.getName(), "Sherbrooke"));
+    }public SherbrookeServerObjectImpl(HashMapImpl database) throws SocketException {
+        super(database, 5053, LoggerUtil.getLogger(SherbrookeServerObjectImpl.class.getName(), "SHE"));
     }
 
     @Override

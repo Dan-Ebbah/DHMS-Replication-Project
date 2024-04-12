@@ -3,6 +3,7 @@ package model;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 public class Appointment {
 
@@ -54,6 +55,11 @@ public class Appointment {
 
     public String getPatientID() {
         return patientID;
+    }
+
+    public List<String> getPatientIDs() {
+        //TODO- implement later
+        return null;
     }
 
     public void setPatientID(String patientID) {

@@ -2,8 +2,6 @@
 package client;
 
 import javax.xml.ws.*;
-import server.ServerImpl;
-import server.ServerInterface;
 
 import java.net.MalformedURLException;
 import java.net.URL;

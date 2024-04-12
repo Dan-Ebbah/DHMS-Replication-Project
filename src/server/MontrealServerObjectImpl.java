@@ -10,12 +10,12 @@ import java.net.SocketException;
 
 @WebService
 @SOAPBinding(style = SOAPBinding.Style.RPC)
-public class MontrealServerImpl extends ServerImpl{
-    public MontrealServerImpl() {
+public class MontrealServerObjectImpl extends ServerObjectImpl {
+    public MontrealServerObjectImpl() {
     }
 
-    public MontrealServerImpl(HashMapImpl database) throws SocketException {
-        super(database, 5052, LoggerUtil.getLogger(MontrealServerImpl.class.getName(), "Montreal"));
+    public MontrealServerObjectImpl(HashMapImpl database) throws SocketException {
+        super(database, 5052, LoggerUtil.getLogger(MontrealServerObjectImpl.class.getName(), "MTL"));
     }
 
     @Override

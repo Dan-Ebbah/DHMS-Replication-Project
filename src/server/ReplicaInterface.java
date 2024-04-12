@@ -1,14 +1,12 @@
 package server;
 
-import model.AppointmentType;
-
 import javax.jws.WebMethod;
 import javax.jws.WebService;
 import javax.jws.soap.SOAPBinding;
 
 @WebService
 @SOAPBinding(style = SOAPBinding.Style.RPC)
-public interface ServerInterface {
+public interface ReplicaInterface {
     @WebMethod
     String addAppointment(String appointmentID, String appointmentType, int capacity);
     @WebMethod
@@ -23,4 +21,8 @@ public interface ServerInterface {
     String listAppointmentAvailability( String appointmentType);
     @WebMethod
     String swapAppointment( String patientID,  String oldAppointmentType,  String oldAppointmentID,  String newAppointmentType,  String newAppointmentID);
+    @WebMethod
+    public String getInfo();
+    @WebMethod
+    public void setInfo(String info);
 }

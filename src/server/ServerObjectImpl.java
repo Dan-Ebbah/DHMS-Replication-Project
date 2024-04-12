@@ -13,27 +13,29 @@ import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.SocketException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Logger;
 
 @WebService(targetNamespace = "http://localhost:8082/server")
 @SOAPBinding(style = SOAPBinding.Style.RPC)
-public class ServerImpl implements ServerInterface {
+public class ServerObjectImpl implements ReplicaInterface {
     private HashMapImpl _database;
     private Logger logger;
 
-    public ServerImpl(HashMapImpl database, int portNum, Logger logger) throws SocketException {
+    public ServerObjectImpl(HashMapImpl database, int portNum, Logger logger) throws SocketException {
         _database = database;
         this.logger = logger;
-        createAndStartThread(portNum, getServerName());
+//        createAndStartThread(portNum, getServerName());
     }
 
-    public ServerImpl(HashMapImpl database, Logger logger) {
+    public ServerObjectImpl(HashMapImpl database, Logger logger) {
         _database = database;
         this.logger = logger;
     }
 
-    public ServerImpl() {
+    public ServerObjectImpl() {
     }
 
     public String getServerName() {
@@ -46,6 +48,7 @@ public class ServerImpl implements ServerInterface {
 
     @Override
     public String addAppointment(String appointmentID, String appointmentType, int capacity) {
+        System.out.println("Hello from the other side");
         if (isAppointmentPresent(appointmentID)) {
             String msg = "Could not add appointment, because appointment seems to already exist";
             logger.info(String.format(msg.concat(": Appointment Type = %s, Appointment ID = %s, Appointment Capacity = %d"), appointmentID, appointmentType, capacity));
@@ -205,6 +208,61 @@ public class ServerImpl implements ServerInterface {
         msg = "Appointments were successfully swapped ";
         logger.info(msg);
         return msg;
+    }
+
+    @Override
+    public String getInfo() {//returns info of only this hospital
+        String info;
+        ConcurrentHashMap<String, Appointment> a = new ConcurrentHashMap<>();
+        a.putAll(_database.getByAppointmentType(AppointmentType.Dental));
+        a.putAll(_database.getByAppointmentType(AppointmentType.Physician));
+        a.putAll(_database.getByAppointmentType(AppointmentType.Surgeon));
+        info=hashMapToString(a).substring(1);
+        return info;
+    }
+    private String hashMapToString(ConcurrentHashMap<String,Appointment> hashMap){
+        String str = "";
+        for(String s: hashMap.keySet()){
+            str = str.concat(";"+hashMap.get(s).getAppointmentID() +":"                //appointmentID
+                    + hashMap.get(s).getAppointmentType().toString() +":"    //appointment type
+                    + hashMap.get(s).getCapacity() +":"           //appointment capacity
+                    + usersListToInfo(hashMap.get(s).getPatientIDs())  //users
+            );
+        }
+        return str;
+    }
+
+    private String usersListToInfo(List<String> users){
+        String str = "";
+        for(String s : users){
+            if(!str.equals("")){
+                str = str.concat(","+s);
+            }else{
+                str = str.concat(s);
+            }
+        }
+        return str;
+    }
+
+    @Override
+    public void setInfo(String info) {
+        //reset hashmaps here probably
+        if(info.equals("")){
+            return;
+        }
+        ConcurrentHashMap<AppointmentType, HashMap<String, Appointment>> newDB = null;
+        String[] appointments = info.split(";");
+        for(String appointment: appointments){
+            String[] appointmentInfo = appointment.split(":");
+            String apptId = appointmentInfo[0];
+            AppointmentType appointmentType = AppointmentType.valueOf(appointmentInfo[1]);
+            int appCapacity = Integer.parseInt(appointmentInfo[2]);
+//            appointmentInfo[3].split(","); //TODO: Change
+
+            HashMap<String, Appointment> apptDetails = new HashMap<>();
+            apptDetails.put(apptId, new Appointment(apptId, appointmentType, appCapacity));
+            newDB.put(appointmentType, apptDetails);
+        }
     }
 
     private HospitalType extractHospitalInfo(String newAppointmentID) {

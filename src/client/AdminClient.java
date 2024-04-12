@@ -1,7 +1,6 @@
 package client;
 
 import model.User;
-import server.ServerImpl;
 
 import java.util.Scanner;
 
